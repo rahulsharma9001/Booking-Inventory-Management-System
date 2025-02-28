@@ -23,11 +23,9 @@ public class BookService {
 
     public Book purchaseBook(Long id, int quantity) {
 
-        Book book = repository.findById(id)
-                .orElseThrow(() -> new RuntimeException("Book not found"));
 
         // Check if stock is zero
-        book = repository.findById(id).orElseThrow(() -> new RuntimeException("Book not found"));
+        Book book = repository.findById(id).orElseThrow(() -> new RuntimeException("Book not found"));
         if (book.getQuantityInStock() == 0) {
             throw new InsufficientStockException("Out of Stock! Purchase Rejected.");
         }
