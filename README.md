@@ -19,7 +19,7 @@ This project is a **Book Inventory Management System** built using **Spring Boot
 - **Mockito**
 - **SLF4J**
 
-## Folder Structure
+## Project Structure
 ```
 ├── src
 │   ├── main
