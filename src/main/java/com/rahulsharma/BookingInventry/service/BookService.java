@@ -22,12 +22,6 @@ public class BookService {
     public void deleteBook(Long id) { repository.deleteById(id); }
 
     public Book purchaseBook(Long id, int quantity) {
-//        Book book = repository.findById(id).orElseThrow(() -> new RuntimeException("Book not found"));
-//        if (book.getQuantityInStock() < quantity) {
-//            throw new RuntimeException("Insufficient stock available");
-//        }
-//        book.setQuantityInStock(book.getQuantityInStock() - quantity);
-//        return repository.save(book);
 
         Book book = repository.findById(id)
                 .orElseThrow(() -> new RuntimeException("Book not found"));
