@@ -50,4 +50,9 @@ public class BookingController {
         service.deleteBook(id);
         log.info("Book with ID " + id + "deleted Successfully");
     }
+
+    @PostMapping("/{id}/purchase")
+    public Book purchaseBook(@PathVariable Long id, @RequestParam int quantity) {
+        return service.purchaseBook(id, quantity);
+    }
 }

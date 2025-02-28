@@ -1,6 +1,7 @@
 package com.rahulsharma.BookingInventry.service;
 
 import com.rahulsharma.BookingInventry.entity.Book;
+import com.rahulsharma.BookingInventry.exception.InsufficientStockException;
 import com.rahulsharma.BookingInventry.repository.BookRepository;
 import org.aspectj.apache.bcel.classfile.Module;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -19,4 +20,27 @@ public class BookService {
     public List<Book> searchBooksByTitle(String title) { return repository.findByTitleContainingIgnoreCase(title); }
     public Book saveBook(Book book) { return repository.save(book); }
     public void deleteBook(Long id) { repository.deleteById(id); }
+
+    public Book purchaseBook(Long id, int quantity) {
+//        Book book = repository.findById(id).orElseThrow(() -> new RuntimeException("Book not found"));
+//        if (book.getQuantityInStock() < quantity) {
+//            throw new RuntimeException("Insufficient stock available");
+//        }
+//        book.setQuantityInStock(book.getQuantityInStock() - quantity);
+//        return repository.save(book);
+
+        Book book = repository.findById(id)
+                .orElseThrow(() -> new RuntimeException("Book not found"));
+
+        // Check if stock is zero
+        book = repository.findById(id).orElseThrow(() -> new RuntimeException("Book not found"));
+        if (book.getQuantityInStock() == 0) {
+            throw new InsufficientStockException("Out of Stock! Purchase Rejected.");
+        }
+        if (book.getQuantityInStock() < quantity) {
+            throw new InsufficientStockException("Insufficient stock available");
+        }
+        book.setQuantityInStock(book.getQuantityInStock() - quantity);
+        return repository.save(book);
+    }
 }
