@@ -39,17 +39,7 @@ class BookingInventryApplicationTests {
 		assertEquals(1, bookService.getAllBooks().size());
 	}
 
-//	@Test
-//	void testPurchaseBook_Success() {
-//		Book book = new Book();
-//		book.setId(1L);
-//		book.setQuantityInStock(10);
-//
-//		when(bookRepository.findById(1L)).thenReturn(Optional.of(book));
-//		when(bookRepository.save(any(Book.class))).thenReturn(book);
-//		Book purchasedBook = bookService.purchaseBook(1L, 5);
-//		assertEquals(5, purchasedBook.getQuantityInStock());
-//	}
+
 
 	@Test
 	void testPurchaseBook_OutOfStock() {
