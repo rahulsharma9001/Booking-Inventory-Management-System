@@ -5,6 +5,8 @@ import com.rahulsharma.BookingInventry.exception.InsufficientStockException;
 import com.rahulsharma.BookingInventry.repository.BookRepository;
 import org.aspectj.apache.bcel.classfile.Module;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.cache.annotation.CacheEvict;
+import org.springframework.cache.annotation.Cacheable;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -15,12 +17,37 @@ public class BookService {
     @Autowired(required = true)
     private BookRepository repository;
 
-    public List<Book> getAllBooks() { return repository.findAll(); }
-    public Optional<Book> getBookById(Long id) { return repository.findById(id); }
-    public List<Book> searchBooksByTitle(String title) { return repository.findByTitleContainingIgnoreCase(title); }
-    public Book saveBook(Book book) { return repository.save(book); }
-    public void deleteBook(Long id) { repository.deleteById(id); }
+    @Cacheable(value = "books")
+    public List<Book> getAllBooks() {
+        System.out.println("Fetching all books from DB.......");
+        return repository.findAll();
+    }
 
+    @Cacheable(value = "books" , key = "#id")
+    public Optional<Book> getBookById(Long id) {
+        System.out.println("Fetching book with ID: " + id + " from DB..............................");
+        return repository.findById(id);
+    }
+
+    @Cacheable(value = "books", key = "#title")
+    public List<Book> searchBooksByTitle(String title) {
+        System.out.println("Searching books by title: " + title + " in DB........");
+        return repository.findByTitleContainingIgnoreCase(title);
+    }
+
+    @CacheEvict(value = "books" , allEntries = true)
+    public Book saveBook(Book book) {
+        System.out.println("Saving new Book entry into the Cache: " + book.getTitle());
+        return repository.save(book);
+    }
+
+    @CacheEvict(value = "books", key = "#id")
+    public void deleteBook(Long id) {
+        System.out.println("Deleting book from Cache with ID: " + id);
+        repository.deleteById(id);
+    }
+
+    @CacheEvict(value = "books", key = "#id")
     public Book purchaseBook(Long id, int quantity) {
 
 
