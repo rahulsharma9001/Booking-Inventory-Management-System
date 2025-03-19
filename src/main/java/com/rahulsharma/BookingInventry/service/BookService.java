@@ -35,7 +35,7 @@ public class BookService {
         return repository.findByTitleContainingIgnoreCase(title);
     }
 
-    @CacheEvict(value = "books" , allEntries = true)
+    @CacheEvict(value = "books")
     public Book saveBook(Book book) {
         System.out.println("Saving new Book entry into the Cache: " + book.getTitle());
         return repository.save(book);
